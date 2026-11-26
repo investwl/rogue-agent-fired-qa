@@ -55,6 +55,12 @@ FONT_ROWS = {
  ' ':'00000/00000/00000/00000/00000/00000/00000',
 }
 
+def text_width(words, size):
+    if type(size) is not int or size <= 0:
+        raise ValueError('Lettering scale must be a positive integer')
+    return max(0, len(words) * 6 - 1) * size
+
+
 class Canvas:
     def __init__(self, width=WIDTH, height=HEIGHT):
         if type(width) is not int or type(height) is not int:
@@ -92,6 +98,7 @@ class Canvas:
                 self.rect(int(left), y, int(right) - int(left) + 1, 1, color)
 
     def text(self, words, x, y, size, color=INK):
+        text_width(words, size)
         missing = set(words) - FONT_ROWS.keys()
         if missing:
             raise ValueError('Unsupported lettering: ' + repr(sorted(missing)))
@@ -102,7 +109,7 @@ class Canvas:
                         self.rect(x + index * 6 * size + col * size, y + row * size, size, size, color)
 
     def center(self, words, y, size, color=INK):
-        self.text(words, (self.width - (len(words) * 6 - 1) * size) // 2, y, size, color)
+        self.text(words, (self.width - text_width(words, size)) // 2, y, size, color)
 
     def png(self):
         def chunk(kind, data):
