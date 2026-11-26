@@ -56,6 +56,10 @@ FONT_ROWS = {
 
 class Canvas:
     def __init__(self, width=WIDTH, height=HEIGHT):
+        if type(width) is not int or type(height) is not int:
+            raise TypeError('Canvas dimensions must be integers')
+        if not (1 <= width <= 1024 and 1 <= height <= 1024):
+            raise ValueError('Canvas dimensions must be between 1 and 1024')
         self.width, self.height = width, height
         self.pixels = bytearray(PAPER * (width * height))
 
