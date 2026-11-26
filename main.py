@@ -178,6 +178,13 @@ def draw():
     c.rect(661, 530, 120, 65, INK)
     c.rect(669, 538, 104, 49, (214, 164, 105))
     c.text('QA', 693, 548, 4)
+    # A large dismissal stamp makes the action readable before the punchline.
+    c.rect(91, 570, 218, 66, RED)
+    c.rect(97, 576, 206, 54, WHITE)
+    c.text('FIRED', 113, 582, 6, RED)
+    c.rect(808, 501, 25, 8, WHITE)
+    c.rect(788, 620, 52, 6, WHITE)
+    c.rect(798, 640, 52, 6, WHITE)
     c.center('AI: I FIRED QA.', 766, 9)
     return c
 
