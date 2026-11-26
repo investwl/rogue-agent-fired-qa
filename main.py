@@ -119,6 +119,8 @@ class Canvas:
         self.text(words, (self.width - text_width(words, size)) // 2, y, size, color)
 
     def png(self):
+        if len(self.pixels) != self.width * self.height * 3:
+            raise ValueError('RGB buffer length does not match canvas dimensions')
         def chunk(kind, data):
             return struct.pack('>I', len(data)) + kind + data + struct.pack('>I', zlib.crc32(kind + data))
         raw = b''.join(b'\x00' + self.pixels[y * self.width * 3:(y + 1) * self.width * 3] for y in range(self.height))
