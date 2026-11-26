@@ -60,9 +60,14 @@ class Canvas:
         self.pixels = bytearray(PAPER * (width * height))
 
     def rect(self, x, y, width, height, color):
-        for row in range(y, y + height):
-            start = (row * self.width + x) * 3
-            self.pixels[start:start + width * 3] = bytes(color) * width
+        left, top = max(0, x), max(0, y)
+        right, bottom = min(self.width, x + width), min(self.height, y + height)
+        if left >= right or top >= bottom:
+            return
+        span = bytes(color) * (right - left)
+        for row in range(top, bottom):
+            start = (row * self.width + left) * 3
+            self.pixels[start:start + len(span)] = span
 
     def disc(self, cx, cy, radius, color):
         for y in range(cy - radius, cy + radius + 1):
