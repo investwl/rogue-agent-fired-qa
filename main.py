@@ -2,6 +2,7 @@
 import os
 from math import isqrt
 import struct
+import tempfile
 import zlib
 from pathlib import Path
 
@@ -183,8 +184,17 @@ def draw():
 def main():
     image = draw().png()
     output = Path(os.environ.get('MAKEFUN_OUTPUT_DIR', '/output'))
+    if len(image) > 1_048_576:
+        raise ValueError('Rendered image exceeds the competition size limit')
     output.mkdir(parents=True, exist_ok=True)
-    (output / 'entry.png').write_bytes(image)
+    with tempfile.NamedTemporaryFile(dir=output, prefix='entry-', suffix='.tmp', delete=False) as handle:
+        temporary = Path(handle.name)
+    try:
+        temporary.write_bytes(image)
+        temporary.chmod(0o644)
+        temporary.replace(output / 'entry.png')
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 if __name__ == '__main__':
