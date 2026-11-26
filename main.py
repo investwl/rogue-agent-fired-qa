@@ -1,5 +1,6 @@
 """Original raster comic. Python standard library only; no assets or network."""
 import os
+from math import isqrt
 import struct
 import zlib
 from pathlib import Path
@@ -74,8 +75,10 @@ class Canvas:
             self.pixels[start:start + len(span)] = span
 
     def disc(self, cx, cy, radius, color):
-        for y in range(cy - radius, cy + radius + 1):
-            half = int((radius * radius - (y - cy) ** 2) ** 0.5)
+        if type(radius) is not int or radius < 0:
+            raise ValueError('Circle radius must be a nonnegative integer')
+        for y in range(max(0, cy - radius), min(self.height, cy + radius + 1)):
+            half = isqrt(radius * radius - (y - cy) ** 2)
             self.rect(cx - half, y, half * 2 + 1, 1, color)
 
     def poly(self, points, color):
