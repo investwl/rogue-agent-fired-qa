@@ -92,8 +92,11 @@ class Canvas:
                 self.rect(int(left), y, int(right) - int(left) + 1, 1, color)
 
     def text(self, words, x, y, size, color=INK):
+        missing = set(words) - FONT_ROWS.keys()
+        if missing:
+            raise ValueError('Unsupported lettering: ' + repr(sorted(missing)))
         for index, char in enumerate(words):
-            for row, pattern in enumerate(FONT_ROWS.get(char, FONT_ROWS[' ']).split('/')):
+            for row, pattern in enumerate(FONT_ROWS[char].split('/')):
                 for col, on in enumerate(pattern):
                     if on == '1':
                         self.rect(x + index * 6 * size + col * size, y + row * size, size, size, color)
