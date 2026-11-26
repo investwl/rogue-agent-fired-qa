@@ -180,7 +180,12 @@ def draw():
     c.center('AI: I FIRED QA.', 766, 9)
     return c
 
-image = draw().png()
-output = Path(os.environ.get('MAKEFUN_OUTPUT_DIR', '/output'))
-output.mkdir(parents=True, exist_ok=True)
-(output / 'entry.png').write_bytes(image)
+def main():
+    image = draw().png()
+    output = Path(os.environ.get('MAKEFUN_OUTPUT_DIR', '/output'))
+    output.mkdir(parents=True, exist_ok=True)
+    (output / 'entry.png').write_bytes(image)
+
+
+if __name__ == '__main__':
+    main()
