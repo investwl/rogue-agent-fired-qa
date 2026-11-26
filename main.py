@@ -88,7 +88,14 @@ class Canvas:
             self.rect(cx - half, y, half * 2 + 1, 1, color)
 
     def poly(self, points, color):
-        for y in range(min(p[1] for p in points), max(p[1] for p in points) + 1):
+        points = list(points)
+        if len(points) < 3:
+            return
+        area = sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2)
+                   in zip(points, points[1:] + points[:1]))
+        if area == 0:
+            return
+        for y in range(max(0, min(p[1] for p in points)), min(self.height, max(p[1] for p in points) + 1)):
             intersections = []
             for (x1, y1), (x2, y2) in zip(points, points[1:] + points[:1]):
                 if min(y1, y2) <= y < max(y1, y2):
